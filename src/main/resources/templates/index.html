@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scheduler</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <style>
+        .word-list {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .word-item {
+            margin-bottom: 15px;
+        }
+        .definition {
+            display: none;
+            margin-left: 20px;
+            color: #555;
+        }
+        .reveal-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .reveal-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">Scheduler</a>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+            <a class="nav-link px-3" href="#">Sign out</a>
+        </div>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">
+                            Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">
+                            <button class="btn btn-sm active" data-bs-toggle="modal" data-bs-target="#addTaskModal">Add Task</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content area -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h2>German-English Dictionary</h2>
+            </div>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Word In German</th>
+                    <th scope="col">Word In English</th>
+                    <th>
+                        <a class="nav-link" href="/addForm">
+                            <span data-feather="layers"></span>
+                            Add
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="word : ${words}">
+                    <td th:text="${word.id}"></td>
+                    <td th:text="${word.getWord()}"></td>
+                    <td>
+                        <button class="btn btn-link" onclick="toggleDefinition(this)">Show Translation</button>
+                        <span class="translation" th:text="${word.getTranslation()}" style="display: none; margin-left: 10px;"></span>
+                    </td>
+
+
+                    <td>
+                        <a class="btn-sm active" th:href="@{/delete(wordId=${word.id})}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </main>
+
+    </div>
+</div>
+
+<script>
+    function toggleDefinition(button) {
+        const definition = button.nextElementSibling;
+        if (definition.style.display === "none") {
+            definition.style.display = "inline";
+            button.textContent = "Hide Translation";
+        } else {
+            definition.style.display = "none";
+            button.textContent = "Show Translation";
+        }
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
